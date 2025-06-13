@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>某某陪诊 - 新疆本地陪诊平台</title>
+    <style>
+        /* ===== 全局样式重置 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "微软雅黑", "Microsoft YaHei", "PingFang SC", sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== 顶部导航栏样式 ===== */
+        .header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+        }
+
+        /* Logo 样式 */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4A90E2;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: #4A90E2;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        /* 导航菜单样式 */
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #4A90E2;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #4A90E2;
+        }
+
+        /* 登录按钮样式 */
+        .login-btn {
+            background: #4A90E2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: #357ABD;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+
+        /* ===== 主要内容区域 ===== */
+        .main-content {
+            margin-top: 70px; /* 为固定导航栏留出空间 */
+        }
+
+        /* ===== 轮播图区域样式 ===== */
+        .hero-section {
+            height: 500px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #4A90E2 0%, #56C596 100%);
+        }
+
+        .carousel {
+            height: 100%;
+            position: relative;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+        }
+
+        .carousel-content h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .carousel-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .carousel-content .cta-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-content .cta-btn:hover {
+            background: white;
+            color: #4A90E2;
+        }
+
+        /* 轮播图控制按钮 */
+        .carousel-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+
+        .carousel-control:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .carousel-control.prev {
+            left: 20px;
+        }
+
+        .carousel-control.next {
+            right: 20px;
+        }
+
+        /* 轮播图指示器 */
+        .carousel-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active,
+        .indicator:hover {
+            background: white;
+        }
+
+        /* ===== 服务区域样式 ===== */
+        .services-section {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 60px;
+            font-weight: 600;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .service-image {
+            height: 200px;
+            background: linear-gradient(45deg, #4A90E2, #56C596);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .service-content {
+            padding: 30px;
+        }
+
+        .service-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .service-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .service-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .service-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            color: #4A90E2;
+            font-weight: bold;
+        }
+
+        .service-btn {
+            background: #4A90E2;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .service-btn:hover {
+            background: #357ABD;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+
+        /* ===== 模态框样式 ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-body {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(45deg, #4A90E2, #56C596);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        /* 模态框动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* ===== 页脚样式 ===== */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 60px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h4 {
+            color: #4A90E2;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #4A90E2;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #34495e;
+            padding-top: 20px;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            color: #95a5a6;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        /* ===== 响应式设计 ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .nav {
+                display: none; /* 移动端隐藏导航，可以添加汉堡菜单 */
+            }
+
+            .carousel-content h1 {
+                font-size: 2rem;
+            }
+
+            .carousel-content p {
+                font-size: 1rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .modal-content {
+                padding: 20px;
+                margin: 20px;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* ===== 平滑滚动 ===== */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ===== 加载动画 ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .service-card {
+            animation: fadeInUp 0.6s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== 顶部导航栏 ===== -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <!-- Logo 区域 -->
+                <a href="#home" class="logo">
+                    <div class="logo-icon">🏥</div>
+                    某某陪诊
+                </a>
+
+                <!-- 导航菜单 -->
+                <nav class="nav">
+                    <a href="#home" class="nav-link active" data-section="home">首页</a>
+                    <a href="#services" class="nav-link" data-section="services">服务</a>
+                    <a href="#" class="nav-link" data-modal="cooperation">招商合作</a>
+                    <a href="#" class="nav-link" data-modal="order">在线下单</a>
+                    <a href="#" class="nav-link" data-modal="recruitment">陪诊师招募</a>
+                    <a href="#" class="nav-link" data-modal="about">关于我们</a>
+                    <button class="login-btn">登录</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== 主要内容区域 ===== -->
+    <main class="main-content">
+        <!-- ===== 轮播图区域 ===== -->
+        <section id="home" class="hero-section">
+            <div class="carousel">
+                <!-- 轮播图第一张 -->
+                <div class="carousel-slide active">
+                    <div class="carousel-content">
+                        <h1>专业陪诊服务</h1>
+                        <p>为新疆本地用户提供高效、贴心的陪诊与上门护理服务</p>
+                        <button class="cta-btn">立即预约</button>
+                    </div>
+                </div>
+
+                <!-- 轮播图第二张 -->
+                <div class="carousel-slide">
+                    <div class="carousel-content">
+                        <h1>上门护理服务</h1>
+                        <p>专业护理人员上门服务，让您在家也能享受专业护理</p>
+                        <button class="cta-btn">了解更多</button>
+                    </div>
+                </div>
+
+                <!-- 轮播图第三张 -->
+                <div class="carousel-slide">
+                    <div class="carousel-content">
+                        <h1>24小时服务</h1>
+                        <p>全天候为您提供贴心服务，随时满足您的需求</p>
+                        <button class="cta-btn">联系我们</button>
+                    </div>
+                </div>
+
+                <!-- 轮播图控制按钮 -->
+                <button class="carousel-control prev" onclick="changeSlide(-1)">‹</button>
+                <button class="carousel-control next" onclick="changeSlide(1)">›</button>
+
+                <!-- 轮播图指示器 -->
+                <div class="carousel-indicators">
+                    <button class="indicator active" onclick="goToSlide(0)"></button>
+                    <button class="indicator" onclick="goToSlide(1)"></button>
+                    <button class="indicator" onclick="goToSlide(2)"></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 服务区域 ===== -->
+        <section id="services" class="services-section">
+            <div class="container">
+                <h2 class="section-title">我们的服务</h2>
+                <div class="services-grid">
+                    <!-- 陪诊服务卡片 -->
+                    <div class="service-card" onclick="showServiceDetail('accompany')">
+                        <div class="service-image">陪诊服务</div>
+                        <div class="service-content">
+                            <h3 class="service-title">陪诊</h3>
+                            <p class="service-description">
+                                专业陪诊师全程陪伴，协助您完成就医流程，包括挂号、排队、取药、陪检等各项服务。
+                            </p>
+                            <ul class="service-features">
+                                <li>专业陪诊师</li>
+                                <li>全程陪伴</li>
+                                <li>省时省力</li>
+                                <li>贴心服务</li>
+                            </ul>
+                            <button class="service-btn">了解详情</button>
+                        </div>
+                    </div>
+
+                    <!-- 上门护理服务卡片 -->
+                    <div class="service-card" onclick="showServiceDetail('nursing')">
+                        <div class="service-image">上门护理</div>
+                        <div class="service-content">
+                            <h3 class="service-title">上门护理</h3>
+                            <p class="service-description">
+                                专业护理人员上门服务，为患者提供专业的护理服务，让您在家也能享受医院级别的护理。
+                            </p>
+                            <ul class="service-features">
+                                <li>专业护理</li>
+                                <li>上门服务</li>
+                                <li>贴心照顾</li>
+                                <li>24小时服务</li>
+                            </ul>
+                            <button class="service-btn">了解详情</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== 模态框 ===== -->
+    <!-- 招商合作模态框 -->
+    <div id="cooperationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">招商合作</h3>
+                <button class="modal-close" onclick="closeModal('cooperationModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-image">招商合作海报</div>
+                <h4>合作优势</h4>
+                <p>我们诚邀全国各地的医疗机构、护理机构与我们建立合作关系，共同为新疆地区的患者提供优质的陪诊和护理服务。</p>
+                <h4>合作方式</h4>
+                <ul>
+                    <li>医疗机构合作：提供专业陪诊师资源</li>
+                    <li>护理机构合作：提供上门护理服务</li>
+                    <li>技术合作：共同开发智能化服务平台</li>
+                    <li>渠道合作：拓展服务覆盖范围</li>
+                </ul>
+                <h4>联系方式</h4>
+                <p>电话：0991-8888888<br>邮箱：cooperation@example.com</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 在线下单模态框 -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">在线下单</h3>
+                <button class="modal-close" onclick="closeModal('orderModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-image">在线下单界面</div>
+                <h4>服务套餐</h4>
+                <ul>
+                    <li><strong>基础陪诊</strong>：¥150/次，4小时服务</li>
+                    <li><strong>全程陪诊</strong>：¥280/次，8小时服务</li>
+                    <li><strong>VIP陪诊</strong>：¥500/次，全天服务</li>
+                    <li><strong>上门护理</strong>：¥200/次，专业护理</li>
+                </ul>
+                <h4>下单流程</h4>
+                <ol>
+                    <li>选择服务类型和套餐</li>
+                    <li>填写患者信息和需求</li>
+                    <li>选择服务时间和地点</li>
+                    <li>确认订单并支付</li>
+                    <li>等待专业陪诊师联系</li>
+                </ol>
+                <p><strong>温馨提示：</strong>请提前24小时预约，紧急情况可拨打客服热线。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 陪诊师招募模态框 -->
+    <div id="recruitmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">陪诊师招募</h3>
+                <button class="modal-close" onclick="closeModal('recruitmentModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-image">招募海报</div>
+                <h4>招募条件</h4>
+                <ul>
+                    <li>年龄：25-45岁，身体健康</li>
+                    <li>学历：大专及以上学历</li>
+                    <li>专业：护理、医学相关专业优先</li>
+                    <li>经验：有医疗行业工作经验者优先</li>
+                    <li>性格：耐心、细心、有责任心</li>
+                </ul>
+                <h4>工作内容</h4>
+                <ul>
+                    <li>陪同患者就医，协助挂号、排队、取药</li>
+                    <li>协助患者完成各项检查</li>
+                    <li>为患者提供心理安慰和情感支持</li>
+                    <li>记录服务过程，及时反馈患者情况</li>
+                </ul>
+                <h4>薪资待遇</h4>
+                <p>底薪+提成，月收入5000-8000元，优秀者可达10000元以上。</p>
+                <h4>联系方式</h4>
+                <p>电话：0991-8888888<br>邮箱：hr@example.com</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 关于我们模态框 -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">关于我们</h3>
+                <button class="modal-close" onclick="closeModal('aboutModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-image">公司介绍</div>
+                <h4>公司简介</h4>
+                <p>某某陪诊成立于2020年，是新疆地区专业的陪诊服务平台。我们致力于为本地用户提供高效、贴心的陪诊与上门护理服务，让每一位患者都能享受到专业、温暖的服务。</p>
+                <h4>我们的使命</h4>
+                <p>让就医不再孤单，让护理更加专业。</p>
+                <h4>核心价值观</h4>
+                <ul>
+                    <li><strong>专业</strong>：提供专业的医疗陪诊服务</li>
+                    <li><strong>贴心</strong>：以患者为中心，提供贴心服务</li>
+                    <li><strong>诚信</strong>：诚信经营，赢得客户信赖</li>
+                    <li><strong>创新</strong>：不断创新服务模式，提升服务质量</li>
+                </ul>
+                <h4>服务优势</h4>
+                <ul>
+                    <li>专业团队：拥有经验丰富的陪诊师团队</li>
+                    <li>服务全面：涵盖陪诊、护理等多种服务</li>
+                    <li>响应迅速：24小时客服热线，快速响应</li>
+                    <li>价格透明：明码标价，无隐形收费</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 服务详情模态框 -->
+    <div id="serviceDetailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="serviceDetailTitle">服务详情</h3>
+                <button class="modal-close" onclick="closeModal('serviceDetailModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="serviceDetailContent">
+                <!-- 内容将通过JavaScript动态填充 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 页脚 ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- 关于我们 -->
+                <div class="footer-column">
+                    <h4>关于我们</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showModal('aboutModal')">公司简介</a></li>
+                        <li><a href="#" onclick="showModal('aboutModal')">企业文化</a></li>
+                        <li><a href="#" onclick="showModal('aboutModal')">发展历程</a></li>
+                        <li><a href="#" onclick="showModal('aboutModal')">新闻动态</a></li>
+                    </ul>
+                </div>
+
+                <!-- 服务项目 -->
+                <div class="footer-column">
+                    <h4>服务项目</h4>
+                    <ul class="footer-links">
+                        <li><a href="#services">陪诊服务</a></li>
+                        <li><a href="#services">上门护理</a></li>
+                        <li><a href="#" onclick="showModal('orderModal')">在线预约</a></li>
+                        <li><a href="#" onclick="showModal('orderModal')">服务套餐</a></li>
+                    </ul>
+                </div>
+
+                <!-- 联系我们 -->
+                <div class="footer-column">
+                    <h4>联系我们</h4>
+                    <ul class="footer-links">
+                        <li><a href="tel:0991-8888888">客服热线：0991-8888888</a></li>
+                        <li><a href="mailto:service@example.com">邮箱：service@example.com</a></li>
+                        <li><a href="#">地址：新疆乌鲁木齐市</a></li>
+                        <li><a href="#">微信：xjpeizhen</a></li>
+                    </ul>
+                </div>
+
+                <!-- 人才招聘 -->
+                <div class="footer-column">
+                    <h4>人才招聘</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showModal('recruitmentModal')">陪诊师招募</a></li>
+                        <li><a href="#" onclick="showModal('recruitmentModal')">职位列表</a></li>
+                        <li><a href="#" onclick="showModal('recruitmentModal')">员工福利</a></li>
+                        <li><a href="#" onclick="showModal('recruitmentModal')">在线申请</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 页脚底部 -->
+            <div class="footer-bottom">
+                <p>&copy; 2024 某某陪诊. 版权所有.</p>
+                <p>营业执照号：新ICP备12345678号</p>
+                <p>医疗执业许可证：新卫医字[2024]第001号</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ===== JavaScript 功能实现 =====
+
+        // 全局变量
+        let currentSlide = 0;
+        let slideInterval;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const indicators = document.querySelectorAll('.indicator');
+
+        // ===== 页面加载完成后初始化 =====
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏥 某某陪诊平台加载完成！');
+            
+            // 初始化轮播图
+            initCarousel();
+            
+            // 初始化导航功能
+            initNavigation();
+            
+            // 初始化模态框功能
+            initModals();
+            
+            // 初始化平滑滚动
+            initSmoothScroll();
+        });
+
+        // ===== 轮播图功能 =====
+        function initCarousel() {
+            console.log('初始化轮播图...');
+            
+            // 开始自动播放
+            startAutoPlay();
+            
+            // 鼠标悬停时暂停自动播放
+            const carousel = document.querySelector('.carousel');
+            carousel.addEventListener('mouseenter', pauseAutoPlay);
+            carousel.addEventListener('mouseleave', startAutoPlay);
+        }
+
+        // 切换到指定幻灯片
+        function goToSlide(index) {
+            console.log('切换到幻灯片:', index);
+            
+            // 移除当前活动状态
+            slides[currentSlide].classList.remove('active');
+            indicators[currentSlide].classList.remove('active');
+            
+            // 更新当前幻灯片索引
+            currentSlide = index;
+            
+            // 添加新的活动状态
+            slides[currentSlide].classList.add('active');
+            indicators[currentSlide].classList.add('active');
+        }
+
+        // 切换到下一张幻灯片
+        function changeSlide(direction) {
+            const totalSlides = slides.length;
+            let newIndex = currentSlide + direction;
+            
+            // 循环切换
+            if (newIndex >= totalSlides) {
+                newIndex = 0;
+            } else if (newIndex < 0) {
+                newIndex = totalSlides - 1;
+            }
+            
+            goToSlide(newIndex);
+        }
+
+        // 开始自动播放
+        function startAutoPlay() {
+            slideInterval = setInterval(() => {
+                changeSlide(1);
+            }, 5000); // 每5秒切换一次
+        }
+
+        // 暂停自动播放
+        function pauseAutoPlay() {
+            if (slideInterval) {
+                clearInterval(slideInterval);
+                slideInterval = null;
+            }
+        }
+
+        // ===== 导航功能 =====
+        function initNavigation() {
+            console.log('初始化导航功能...');
+            
+            // 获取所有导航链接
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            // 为每个导航链接添加点击事件
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const section = this.getAttribute('data-section');
+                    const modal = this.getAttribute('data-modal');
+                    
+                    if (section) {
+                        // 如果是页面内跳转
+                        e.preventDefault();
+                        scrollToSection(section);
+                        updateActiveNavLink(this);
+                    } else if (modal) {
+                        // 如果是模态框
+                        e.preventDefault();
+                        showModal(modal + 'Modal');
+                    }
+                });
+            });
+        }
+
+        // 滚动到指定区域
+        function scrollToSection(sectionId) {
+            console.log('滚动到区域:', sectionId);
+            
+            const targetElement = document.getElementById(sectionId);
+            if (targetElement) {
+                const headerHeight = 70; // 导航栏高度
+                const targetPosition = targetElement.offsetTop - headerHeight;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // 更新活动导航链接
+        function updateActiveNavLink(activeLink) {
+            // 移除所有活动状态
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // 添加活动状态到当前链接
+            activeLink.classList.add('active');
+        }
+
+        // ===== 模态框功能 =====
+        function initModals() {
+            console.log('初始化模态框功能...');
+            
+            // 点击模态框背景关闭
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        closeModal(this.id);
+                    }
+                });
+            });
+            
+            // ESC键关闭模态框
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeAllModals();
+                }
+            });
+        }
+
+        // 显示模态框
+        function showModal(modalId) {
+            console.log('显示模态框:', modalId);
+            
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden'; // 防止背景滚动
+            }
+        }
+
+        // 关闭模态框
+        function closeModal(modalId) {
+            console.log('关闭模态框:', modalId);
+            
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = ''; // 恢复背景滚动
+            }
+        }
+
+        // 关闭所有模态框
+        function closeAllModals() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.classList.remove('active');
+            });
+            document.body.style.overflow = '';
+        }
+
+        // ===== 服务详情功能 =====
+        function showServiceDetail(serviceType) {
+            console.log('显示服务详情:', serviceType);
+            
+            const modal = document.getElementById('serviceDetailModal');
+            const title = document.getElementById('serviceDetailTitle');
+            const content = document.getElementById('serviceDetailContent');
+            
+            if (serviceType === 'accompany') {
+                title.textContent = '陪诊服务详情';
+                content.innerHTML = `
+                    <div class="modal-image">陪诊服务详情</div>
+                    <h4>服务内容</h4>
+                    <ul>
+                        <li><strong>挂号服务</strong>：协助患者完成医院挂号流程</li>
+                        <li><strong>排队陪护</strong>：陪同患者排队等候，提供心理安慰</li>
+                        <li><strong>检查陪护</strong>：陪同患者完成各项检查项目</li>
+                        <li><strong>取药服务</strong>：协助患者取药并核对药品信息</li>
+                        <li><strong>报告解读</strong>：协助患者理解检查报告内容</li>
+                    </ul>
+                    <h4>服务流程</h4>
+                    <ol>
+                        <li>预约确认：确认服务时间、地点和需求</li>
+                        <li>陪诊师到达：按约定时间到达指定地点</li>
+                        <li>全程陪护：陪同患者完成就医流程</li>
+                        <li>服务记录：记录服务过程和服务内容</li>
+                        <li>服务反馈：及时反馈患者情况和需求</li>
+                    </ol>
+                    <h4>服务优势</h4>
+                    <ul>
+                        <li>专业陪诊师，经验丰富</li>
+                        <li>熟悉医院流程，提高效率</li>
+                        <li>提供心理支持，缓解紧张情绪</li>
+                        <li>全程记录，服务可追溯</li>
+                    </ul>
+                    <h4>价格说明</h4>
+                    <p>基础陪诊：¥150/次（4小时）<br>
+                    全程陪诊：¥280/次（8小时）<br>
+                    VIP陪诊：¥500/次（全天）</p>
+                `;
+            } else if (serviceType === 'nursing') {
+                title.textContent = '上门护理服务详情';
+                content.innerHTML = `
+                    <div class="modal-image">上门护理服务详情</div>
+                    <h4>服务内容</h4>
+                    <ul>
+                        <li><strong>基础护理</strong>：协助患者日常生活护理</li>
+                        <li><strong>专业护理</strong>：伤口护理、换药等专业服务</li>
+                        <li><strong>康复护理</strong>：协助患者进行康复训练</li>
+                        <li><strong>心理护理</strong>：为患者提供心理支持和安慰</li>
+                        <li><strong>健康指导</strong>：提供健康知识和护理指导</li>
+                    </ul>
+                    <h4>适用人群</h4>
+                    <ul>
+                        <li>术后康复患者</li>
+                        <li>慢性病患者</li>
+                        <li>老年患者</li>
+                        <li>行动不便患者</li>
+                        <li>需要专业护理的患者</li>
+                    </ul>
+                    <h4>服务流程</h4>
+                    <ol>
+                        <li>需求评估：了解患者病情和护理需求</li>
+                        <li>制定方案：根据患者情况制定护理方案</li>
+                        <li>上门服务：按约定时间上门提供护理服务</li>
+                        <li>记录反馈：记录护理过程和患者情况</li>
+                        <li>定期回访：定期回访了解患者恢复情况</li>
+                    </ol>
+                    <h4>价格说明</h4>
+                    <p>基础护理：¥200/次（2小时）<br>
+                    专业护理：¥300/次（3小时）<br>
+                    康复护理：¥400/次（4小时）</p>
+                `;
+            }
+            
+            showModal('serviceDetailModal');
+        }
+
+        // ===== 平滑滚动功能 =====
+        function initSmoothScroll() {
+            console.log('初始化平滑滚动...');
+            
+            // 监听滚动事件，更新导航高亮
+            window.addEventListener('scroll', function() {
+                updateNavOnScroll();
+            });
+        }
+
+        // 根据滚动位置更新导航高亮
+        function updateNavOnScroll() {
+            const scrollPosition = window.scrollY;
+            
+            // 检查各个区域的位置
+            const homeSection = document.getElementById('home');
+            const servicesSection = document.getElementById('services');
+            
+            if (scrollPosition < servicesSection.offsetTop - 100) {
+                updateActiveNavLink(document.querySelector('[data-section="home"]'));
+            } else {
+                updateActiveNavLink(document.querySelector('[data-section="services"]'));
+            }
+        }
+
+        // ===== 工具函数 =====
+        
+        // 防抖函数
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // 节流函数
+        function throttle(func, limit) {
+            let inThrottle;
+            return function() {
+                const args = arguments;
+                const context = this;
+                if (!inThrottle) {
+                    func.apply(context, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            }
+        }
+
+        // ===== 页面加载完成后的额外初始化 =====
+        window.addEventListener('load', function() {
+            console.log('页面完全加载完成！');
+            
+            // 添加页面加载完成的动画
+            document.body.classList.add('loaded');
+            
+            // 可以在这里添加其他初始化代码
+        });
+
+        // ===== 错误处理 =====
+        window.addEventListener('error', function(e) {
+            console.error('页面发生错误:', e.error);
+        });
+
+        // ===== 性能监控 =====
+        window.addEventListener('load', function() {
+            // 页面加载性能监控
+            const loadTime = performance.now();
+            console.log('页面加载时间:', loadTime.toFixed(2) + 'ms');
+        });
+
+        // ===== 键盘快捷键支持 =====
+        document.addEventListener('keydown', function(e) {
+            // 左右箭头键控制轮播图
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                changeSlide(-1);
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                changeSlide(1);
+            }
+        });
+
+        // ===== 触摸支持（移动端） =====
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // 向左滑动 - 下一张
+                    changeSlide(1);
+                } else {
+                    // 向右滑动 - 上一张
+                    changeSlide(-1);
+                }
+            }
+        }
+
+        // ===== 页面可见性处理 =====
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                // 页面隐藏时暂停轮播
+                pauseAutoPlay();
+            } else {
+                // 页面显示时恢复轮播
+                startAutoPlay();
+            }
+        });
+
+        console.log('🎉 某某陪诊平台 JavaScript 加载完成！');
+    </script>
+</body>
+</html> 
